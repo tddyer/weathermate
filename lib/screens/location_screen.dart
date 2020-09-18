@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -12,6 +13,24 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+
+  int temp;
+  int condition;
+  String city;
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.locationWeather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    double temperature = weatherData['main']['temp'];
+    temp = temperature.toInt();
+    condition = weatherData['weather'][0]['id'];
+    city = weatherData['name'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +73,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '32°',
+                      '$temp°',
                       style: kTempTextStyle,
                     ),
                     Text(
@@ -79,8 +98,3 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
-
-// double temp = decoded['main']['temp'];
-// int condition = decoded['weather'][0]['id'];
-// String city = decoded['name'];
-// String weatherDesc = decoded['weather'][0]['description'];
