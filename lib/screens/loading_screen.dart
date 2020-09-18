@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:weathermate/services/location.dart';
-import 'package:http/http.dart' as http;
+import 'package:weathermate/services/networking.dart';
 
 const apiKey = 'apiKey';
 
@@ -18,11 +17,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
   // accesses device location
-  void getLocation() async {
+  void getLocationData() async {
     Location location = Location();
 
     await location.getCurrentLocation();
@@ -30,28 +29,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
     latitude = location.latitude;
     longitude = location.longitude;
 
-    getData();
-  }
-
-  // uses openweathermap api to get weather data
-  void getData() async {
-    http.Response response = await http.get(
-      'https://api.openweathermap.org/data/2.5/weather?'
+    Networking weatherNetwork = Networking(url: 'https://api.openweathermap.org/data/2.5/weather?'
       'lat=$latitude&lon=$longitude&appid=$apiKey');
-    
-    if (response.statusCode == 200) {
-      String data = response.body;
-      var decoded = jsonDecode(data);
-      
-      double temp = decoded['main']['temp'];
-      int condition = decoded['weather'][0]['id'];
-      String city = decoded['name'];
-      String weatherDesc = decoded['weather'][0]['description'];
 
-      print('$temp, $condition, $city, $weatherDesc');
-    } else {
-      print(response.statusCode);
-    }
+    var weatherData = await weatherNetwork.getData();
+
   }
 
   @override
