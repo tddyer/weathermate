@@ -1,8 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:weathermate/services/location.dart';
 import 'package:http/http.dart' as http;
+
+const apiKey = 'apiKey';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -10,6 +11,9 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+
+  double latitude;
+  double longitude;
 
   @override
   void initState() {
@@ -23,15 +27,17 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     await location.getCurrentLocation();
 
-    print(location.latitude);
-    print(location.longitude);
+    latitude = location.latitude;
+    longitude = location.longitude;
+
+    getData();
   }
 
   // uses openweathermap api to get weather data
   void getData() async {
     http.Response response = await http.get(
-      'https://samples.openweathermap.org/data/2.5/weather?'
-      'lat=35&lon=139&appid=439d4b804bc8187953eb36d2a8c26a02');
+      'https://api.openweathermap.org/data/2.5/weather?'
+      'lat=$latitude&lon=$longitude&appid=$apiKey');
     
     if (response.statusCode == 200) {
       String data = response.body;
@@ -50,7 +56,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold(
     );
   }
