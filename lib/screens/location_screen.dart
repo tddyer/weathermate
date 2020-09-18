@@ -28,8 +28,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
-    double temperature = weatherData['main']['temp'];
-    temp = temperature.toInt();
+    temp = weatherData['main']['temp'];
     condition = weatherData['weather'][0]['id'];
     city = weatherData['name'];
   }

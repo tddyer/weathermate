@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:weathermate/services/location.dart';
 import 'package:weathermate/services/networking.dart';
 import 'location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-const apiKey = 'apiKey';
+String apiKey = DotEnv().env['WEATHER_API'].toString();
 
 class LoadingScreen extends StatefulWidget {
   @override
