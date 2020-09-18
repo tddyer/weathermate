@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// takes a url for retrieving api data
 class Networking {
 
   Networking({this.url});

@@ -21,9 +21,12 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // retrieve weather data upon creation of screen
     updateUI(widget.locationWeather);
   }
 
+  // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
     double temperature = weatherData['main']['temp'];
     temp = temperature.toInt();
