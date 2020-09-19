@@ -3,6 +3,8 @@ import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/utilities/constants.dart';
 import 'city_screen.dart';
 
+// TODO: add forecast data
+
 class LocationScreen extends StatefulWidget {
 
   LocationScreen({this.locationWeather});
