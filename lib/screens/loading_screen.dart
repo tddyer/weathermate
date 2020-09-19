@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:weathermate/services/location.dart';
-import 'package:weathermate/services/networking.dart';
 import 'location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:weathermate/services/weather.dart';
 
-String apiKey = DotEnv().env['WEATHER_API'].toString();
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -22,15 +19,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   // accesses device location + get weather data from OpenWeatherMap (OWM) api
   void getLocationData() async {
-    // get device location
-    Location location = Location();
-    await location.getCurrentLocation();
 
-    // tap into OWM api + retrieve weather data
-    Networking weatherNetwork = Networking(url: 'https://api.openweathermap.org/data/2.5/weather?'
-      'lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=imperial');
-
-    var weatherData = await weatherNetwork.getData();
+    // get weather data for current location
+    var weatherData = await WeatherModel().getLocationWeather();    
 
     // transfer weather data to location screen
     Navigator.push(context, MaterialPageRoute(builder: (context) {

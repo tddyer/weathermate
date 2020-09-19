@@ -1,6 +1,28 @@
+import 'package:weathermate/services/location.dart';
+import 'package:weathermate/services/networking.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+String apiKey = DotEnv().env['WEATHER_API'].toString();
+const openWeatherMapURLStart = 'https://api.openweathermap.org/data/2.5/weather';
+
 class WeatherModel {
 
   // TODO: consider having background image change based upon weather conditions
+
+  Future<dynamic> getLocationWeather() async {
+    // get device location
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    // tap into OWM api + retrieve weather data
+    Networking weatherNetwork = Networking(
+      url: '$openWeatherMapURLStart?lat=${location.latitude}&lon=${location.longitude}'
+      '&appid=$apiKey&units=imperial');
+
+    var weatherData = await weatherNetwork.getData();
+
+    return weatherData;
+  }
 
   String getWeatherIcon(int condition) {
     if (condition < 300) {
