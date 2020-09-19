@@ -31,13 +31,22 @@ class _LocationScreenState extends State<LocationScreen> {
 
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
-    city = weatherData['name'];
+    setState(() {
+      if (weatherData == null) {
+        temp = 0;
+        weatherIcon = 'Error';
+        weatherMessage = 'Unable to retrieve weather data. Ensure location services have been enabled';
+        city = '';
+        return;
+      }
+      city = weatherData['name'];
 
-    temp = weatherData['main']['temp'].toInt();
-    weatherMessage = weather.getMessage(temp);
+      temp = weatherData['main']['temp'].toInt();
+      weatherMessage = weather.getMessage(temp);
 
-    var condition = weatherData['weather'][0]['id'];
-    weatherIcon = weather.getWeatherIcon(condition);
+      var condition = weatherData['weather'][0]['id'];
+      weatherIcon = weather.getWeatherIcon(condition);
+    });
   }
 
   @override
@@ -61,6 +70,8 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+
+                  // TODO: move these buttons to a side menu that includes settings
                   FlatButton(
                     onPressed: () async {
                       var weatherData = await weather.getLocationWeather();
