@@ -1,4 +1,7 @@
 class WeatherModel {
+
+  // TODO: consider having background image change based upon weather conditions
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
@@ -20,11 +23,11 @@ class WeatherModel {
   }
 
   String getMessage(int temp) {
-    if (temp > 25) {
+    if (temp > 85) {
       return 'It\'s 🍦 time';
-    } else if (temp > 20) {
+    } else if (temp > 70) {
       return 'Time for shorts and 👕';
-    } else if (temp < 10) {
+    } else if (temp < 60) {
       return 'You\'ll need 🧣 and 🧤';
     } else {
       return 'Bring a 🧥 just in case';
