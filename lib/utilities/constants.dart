@@ -36,4 +36,4 @@ const kTextFieldInputDecoration =  InputDecoration(
     ),
     borderSide: BorderSide.none,
   ),
-)
+);

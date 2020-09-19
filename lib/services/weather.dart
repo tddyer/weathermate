@@ -9,6 +9,13 @@ class WeatherModel {
 
   // TODO: consider having background image change based upon weather conditions
 
+  // obtains weather for user specified city
+  Future<dynamic> getCityWeather(String city) async {
+    Networking network = Networking(url: '$openWeatherMapURLStart?q=$city&appid=$apiKey&units=imperial');
+    var weatherData = await network.getData();
+    return weatherData;
+  }
+
   Future<dynamic> getLocationWeather() async {
     // get device location
     Location location = Location();
@@ -52,7 +59,7 @@ class WeatherModel {
     } else if (temp < 35) {
       return 'You\'ll need 🧣 and 🧤';
     } else {
-      return 'Bring a 🧥 just in case';
+      return 'Bring a 🧥';
     }
   }
 }
