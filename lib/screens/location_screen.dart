@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/utilities/constants.dart';
+import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
 
@@ -32,10 +33,10 @@ class _LocationScreenState extends State<LocationScreen> {
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
     setState(() {
-      if (weatherData == null) {
+      if (weatherData == null) { // TODO: make this better by adding popup error message instead
         temp = 0;
         weatherIcon = 'Error';
-        weatherMessage = 'Unable to retrieve weather data. Ensure location services have been enabled';
+        weatherMessage = 'Unable to retrieve weather data';
         city = '';
         return;
       }
@@ -83,7 +84,11 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return CityScreen();
+                      }));
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
