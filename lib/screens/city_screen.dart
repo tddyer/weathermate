@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weathermate/utilities/constants.dart';
-import 'location_screen.dart';
 
 // TODO: UPDATE THIS UI
 

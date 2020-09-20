@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/utilities/constants.dart';
+import 'package:weathermate/widgets/fade_in.dart';
 import 'city_screen.dart';
 
 // TODO: add forecast data
@@ -111,23 +112,32 @@ class _LocationScreenState extends State<LocationScreen> {
                 padding: EdgeInsets.only(left: 15.0),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      '$temp°',
-                      style: kTempTextStyle,
+                    FadeIn(
+                      delay: 1.0, 
+                      child: Text(
+                        '$temp°',
+                        style: kTempTextStyle,
+                      ),
                     ),
-                    Text(
-                      weatherIcon,
-                      style: kConditionTextStyle,
+                    FadeIn(
+                      delay: 2.0,
+                      child: Text(
+                        weatherIcon,
+                        style: kConditionTextStyle,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
-                child: Text(
-                  '$weatherMessage in $city',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
+              FadeIn(
+                delay: 3.0,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
+                  child: Text(
+                    '$weatherMessage in $city',
+                    textAlign: TextAlign.right,
+                    style: kMessageTextStyle,
+                  ),
                 ),
               ),
             ],

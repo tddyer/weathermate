@@ -15,6 +15,8 @@ dependencies:
   geolocator: ^6.0.0
   http: ^0.12.2
   flutter_spinkit: ^4.1.2
+  simple_animations: ^2.2.2
+  supercharged: ^1.10.0
 
 dev_dependencies:
   flutter_test:
