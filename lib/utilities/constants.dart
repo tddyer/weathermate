@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weathermate/widgets/animated_background.dart';
 
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
@@ -36,4 +37,12 @@ const kTextFieldInputDecoration =  InputDecoration(
     ),
     borderSide: BorderSide.none,
   ),
+);
+
+
+AnimatedBackground rainBackground = AnimatedBackground(
+  primaryColor: Colors.grey[600],
+  primaryShade: Colors.grey[700], 
+  secondaryColor: Colors.blueGrey[600], 
+  secondaryShade: Colors.blueGrey[700],
 );
