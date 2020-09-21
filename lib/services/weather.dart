@@ -33,18 +33,25 @@ class WeatherModel {
 
   String getWeatherIcon(int condition) {
     if (condition < 300) {
+      // background = rainBackground
       return '🌩';
     } else if (condition < 400) {
+      // background = rainBackground
       return '🌧';
     } else if (condition < 600) {
+      // background = rainBackground
       return '☔️';
     } else if (condition < 700) {
+      // background = snowBackground
       return '☃️';
     } else if (condition < 800) {
+      // background = foggyBackground
       return '🌫';
     } else if (condition == 800) {
+      // background = sunnyBackground
       return '☀️';
     } else if (condition <= 804) {
+      // background = cloudyBackground
       return '☁️';
     } else {
       return '🤷‍';

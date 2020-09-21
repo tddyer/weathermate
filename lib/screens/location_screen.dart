@@ -70,7 +70,7 @@ class _LocationScreenState extends State<LocationScreen> {
               // START ANIMATED BACKGROUND
               // TODO: sync up background with weather conditions
               Positioned.fill(
-                child: rainBackground,
+                child: snowBackground,
               ),
               onBottom(
                 AnimatedWave(
