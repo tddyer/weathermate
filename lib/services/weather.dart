@@ -1,13 +1,12 @@
 import 'package:weathermate/services/location.dart';
 import 'package:weathermate/services/networking.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geocoder/geocoder.dart';
 
 String apiKey = DotEnv().env['WEATHER_API'].toString();
-const openWeatherMapURLStart = 'https://api.openweathermap.org/data/2.5/weather';
+const openWeatherMapURLStart = 'https://api.openweathermap.org/data/2.5/onecall';
 
 class WeatherModel {
-
-  // TODO: consider having background image change based upon weather conditions
 
   // obtains weather for user specified city
   Future<dynamic> getCityWeather(String city) async {
@@ -27,6 +26,11 @@ class WeatherModel {
       '&appid=$apiKey&units=imperial');
 
     var weatherData = await weatherNetwork.getData();
+    
+    // add cityName to weatherData
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(location.latitude, location.longitude));
+    List addrParts = addresses[0].addressLine.split(',');
+    weatherData['cityName'] = addrParts[1];
 
     return weatherData;
   }

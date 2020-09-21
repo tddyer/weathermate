@@ -49,12 +49,12 @@ class _LocationScreenState extends State<LocationScreen> {
         city = '';
         return;
       }
-      city = weatherData['name'];
+      city = weatherData['cityName'];
 
-      temp = weatherData['main']['temp'].toInt();
+      temp = weatherData['current']['temp'].toInt();
       weatherMessage = weather.getMessage(temp);
 
-      var condition = weatherData['weather'][0]['id'];
+      var condition = weatherData['current']['weather'][0]['id'];
       weatherIcon = weather.getWeatherIcon(condition);
     });
   }
@@ -122,6 +122,9 @@ class _LocationScreenState extends State<LocationScreen> {
                               ),
                             );
                             if (inputCity != null) {
+
+                              // TODO: FIGURE OUT HOW TO GET WEATHER DATA USING NEW API CALL (i.e from city name or get coordinates from city name)
+
                               var weatherData = await weather.getCityWeather(inputCity);
                               updateUI(weatherData);
                             }
