@@ -1,6 +1,7 @@
 import 'package:weathermate/services/location.dart';
 import 'package:weathermate/services/networking.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:basic_utils/basic_utils.dart';
 import 'package:geocoder/geocoder.dart';
 
 String apiKey = DotEnv().env['WEATHER_API'].toString();
@@ -10,8 +11,13 @@ class WeatherModel {
 
   // obtains weather for user specified city
   Future<dynamic> getCityWeather(String city) async {
-    Networking network = Networking(url: '$openWeatherMapURLStart?q=$city&appid=$apiKey&units=imperial');
+    var addresses = await Geocoder.local.findAddressesFromQuery(city);
+    var firstMatch = addresses[0];
+    Networking network = Networking(
+      url: '$openWeatherMapURLStart?lat=${firstMatch.coordinates.latitude}&lon=${firstMatch.coordinates.longitude}'
+      '&appid=$apiKey&units=imperial');
     var weatherData = await network.getData();
+    weatherData['cityName'] = StringUtils.capitalize(city);
     return weatherData;
   }
 

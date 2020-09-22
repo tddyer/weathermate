@@ -15,7 +15,7 @@ class Networking {
       String data = response.body;
       return jsonDecode(data);
     } else {
-      print(response.statusCode);
+      print('Unable to retrieve data: ${response.statusCode}');
     }
   }
 }

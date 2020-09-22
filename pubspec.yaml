@@ -18,6 +18,7 @@ dependencies:
   simple_animations: ^2.2.2
   supercharged: ^1.10.0
   geocoder: ^0.2.1
+  basic_utils: ^1.2.0
 
 dev_dependencies:
   flutter_test:
