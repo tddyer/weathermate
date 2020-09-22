@@ -93,82 +93,80 @@ class _LocationScreenState extends State<LocationScreen> {
                 )
               ),
               // END ANIMATED BACKGROUND
-              Container(
-                child: Column( // main weather content section
-                  children: [
-                    Padding( // top navigation buttons
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          // TODO: move these buttons to a side menu that includes settings
-                          FlatButton(
-                            onPressed: () async {
-                              var weatherData = await weather.getLocationWeather();
-                              updateUI(weatherData);
-                            },
-                            child: Icon(
-                              Icons.near_me,
-                              size: 50.0,
-                            ),
+              Column( // main weather content section
+                children: [
+                  Padding( // top navigation buttons
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        // TODO: move these buttons to a side menu that includes settings
+                        FlatButton(
+                          onPressed: () async {
+                            var weatherData = await weather.getLocationWeather();
+                            updateUI(weatherData);
+                          },
+                          child: Icon(
+                            Icons.near_me,
+                            size: 50.0,
                           ),
-                          FlatButton(
-                            onPressed: () async {
-                              var inputCity = await Navigator.push( // returns Future output from CityScreen (when Navigator.pop is called)
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return CityScreen();
-                                  },
-                                ),
-                              );
-                              if (inputCity != null) {
-                                var weatherData = await weather.getCityWeather(inputCity);
-                                updateUI(weatherData);
-                              }
-                            },
-                            child: Icon(
-                              Icons.location_city,
-                              size: 50.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: <Widget>[
-                          FadeIn(
-                            delay: 1.0, 
-                            child: Text(
-                              '$temp°',
-                              style: kTempTextStyle,
-                            ),
-                          ),
-                          FadeIn(
-                            delay: 2.0,
-                            child: Text(
-                              weatherIcon,
-                              style: kConditionTextStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    FadeIn(
-                      delay: 3.0,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
-                        child: Text(
-                          '$weatherMessage in $city',
-                          textAlign: TextAlign.right,
-                          style: kMessageTextStyle,
                         ),
+                        FlatButton(
+                          onPressed: () async {
+                            var inputCity = await Navigator.push( // returns Future output from CityScreen (when Navigator.pop is called)
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return CityScreen();
+                                },
+                              ),
+                            );
+                            if (inputCity != null) {
+                              var weatherData = await weather.getCityWeather(inputCity);
+                              updateUI(weatherData);
+                            }
+                          },
+                          child: Icon(
+                            Icons.location_city,
+                            size: 50.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        FadeIn(
+                          delay: 1.0, 
+                          child: Text(
+                            '$temp°',
+                            style: kTempTextStyle,
+                          ),
+                        ),
+                        FadeIn(
+                          delay: 2.0,
+                          child: Text(
+                            weatherIcon,
+                            style: kConditionTextStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  FadeIn(
+                    delay: 3.0,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
+                      child: Text(
+                        '$weatherMessage in $city',
+                        textAlign: TextAlign.right,
+                        style: kMessageTextStyle,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

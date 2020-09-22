@@ -53,6 +53,7 @@ class _CityScreenState extends State<CityScreen> {
               ),
               FlatButton(
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   Navigator.pop(context, city);
                 },
                 child: Text(
