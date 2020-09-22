@@ -7,7 +7,6 @@ import 'package:weathermate/widgets/gradient_background.dart';
 import 'package:weathermate/widgets/animated_background.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
 import 'dart:math';
-import 'package:weathermate/utilities/constants.dart';
 
 
 // TODO: add forecast data
@@ -26,7 +25,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   WeatherModel weather = WeatherModel();
 
-  int temp;
+  int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherMessage;
   String weatherIcon;
   String city;
@@ -41,6 +40,8 @@ class _LocationScreenState extends State<LocationScreen> {
 
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
+    print(weatherData);
+    // add feels_like, wind_speed, humidity, uvi -> all in current
     setState(() {
       if (weatherData == null) { // TODO: make this better by adding popup error message instead
         temp = 0;
@@ -52,6 +53,11 @@ class _LocationScreenState extends State<LocationScreen> {
       city = weatherData['cityName'];
 
       temp = weatherData['current']['temp'].toInt();
+      humidity = weatherData['current']['humidity'].toInt();
+      feelsLike = weatherData['current']['feels_like'].toInt();
+      windSpeed = weatherData['current']['wind_speed'].toInt();
+      uvi = weatherData['current']['uvi'].toInt();
+
       weatherMessage = weather.getMessage(temp);
 
       var condition = weatherData['current']['weather'][0]['id'];
@@ -155,17 +161,50 @@ class _LocationScreenState extends State<LocationScreen> {
                       ],
                     ),
                   ),
+                  // FORECASE DATA HERE
                   FadeIn(
                     delay: 3.0,
                     child: Padding(
-                      padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
-                      child: Text(
-                        '$weatherMessage in $city',
-                        textAlign: TextAlign.right,
-                        style: kMessageTextStyle,
+                      padding: EdgeInsets.only(left: 50.0),
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Feels like: $feelsLike°',
+                            textAlign: TextAlign.left,
+                            style: kWeatherCharacteristicsTextStyle,
+                          ),
+                          Text(
+                            'Humidity: $humidity%',
+                            textAlign: TextAlign.left,
+                            style: kWeatherCharacteristicsTextStyle,
+                          ),
+                          Text(
+                            'Wind: $windSpeed mph',
+                            textAlign: TextAlign.left,
+                            style: kWeatherCharacteristicsTextStyle,
+                          ),
+                          Text(
+                            'UVI: $uvi',
+                            textAlign: TextAlign.left,
+                            style: kWeatherCharacteristicsTextStyle,
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                  // FadeIn(
+                  //   delay: 3.0,
+                  //   child: Padding(
+                  //     padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
+                  //     child: Text(
+                  //       '$weatherMessage in $city',
+                  //       textAlign: TextAlign.right,
+                  //       style: kMessageTextStyle,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
