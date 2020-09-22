@@ -1,13 +1,10 @@
-import 'dart:ffi';
-
-import 'package:flutter/material.dart';
-import 'package:weathermate/services/weather.dart';
-import 'package:weathermate/utilities/constants.dart';
-import 'package:weathermate/widgets/fade_in.dart';
-import 'city_screen.dart';
-import 'package:weathermate/widgets/gradient_background.dart';
-import 'package:weathermate/widgets/animated_background.dart';
+import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
+import 'package:weathermate/utilities/constants.dart';
+import 'package:weathermate/services/weather.dart';
+import 'package:weathermate/widgets/fade_in.dart';
+import 'package:flutter/material.dart';
+import 'city_screen.dart';
 import 'dart:math';
 
 
@@ -41,32 +38,37 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUI(widget.locationWeather);
   }
 
-  // TODO: add times to forecast cards
   Widget generateForecastWidget() {
-    List<Column> forecastCards = [];
+    List<Widget> forecastCards = [];
     for (int i = 0; i < upcomingHours.length; i++) {
       forecastCards.add(Column(
         children: [
+          Text(
+            "${upcomingHours[i]['time']}",
+            style: kForecastTextStyle,
+          ),
           Text(
             "${upcomingHours[i]['icon']}",
             style: kForecastConditionTextStyle,
           ),
           Text(
-            "${upcomingHours[i]['temp']}",
+            "${upcomingHours[i]['temp']}°",
             textAlign: TextAlign.left,
             style: kForecastTextStyle,
           ),
         ],
       ));
+      forecastCards.add(SizedBox(width: 15.0));
     }
-    return Row(children: forecastCards);
+
+    return Row(
+      children: forecastCards,
+      mainAxisAlignment: MainAxisAlignment.center,
+    );
   }
 
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
-    // for (int i = 0; i < 48; i++)
-    //   print(weatherData['hourly'][i]['temp']);
-    // add feels_like, wind_speed, humidity, uvi -> all in current
     setState(() {
       if (weatherData == null) { // TODO: make this better by adding popup error message instead
         temp = 0;
@@ -78,7 +80,17 @@ class _LocationScreenState extends State<LocationScreen> {
       city = weatherData['cityName'];
 
       for (int i = 0; i < 4; i++) {
-        //print(weatherData['hourly'][i]['temp']);
+        upcomingHours[i]['time'] = weatherData['hourly'][i * 3]['dt'];
+        upcomingHours[i]['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * upcomingHours[i]['time']); // converting timestamp -> DateTime
+        upcomingHours[i]['time'] = '${upcomingHours[i]['time'].hour}';
+        if (int.parse(upcomingHours[i]['time']) > 12) {
+          upcomingHours[i]['time'] = (int.parse(upcomingHours[i]['time']) % 12).toString() + " PM";
+        } else if (int.parse(upcomingHours[i]['time']) == 12) {
+          upcomingHours[i]['time'] = "${upcomingHours[i]['time']} PM";
+        } else {
+          upcomingHours[i]['time'] = "${upcomingHours[i]['time']} AM";
+        }
+        
         upcomingHours[i]['temp'] = weatherData['hourly'][i * 3]['temp'].toInt();
         upcomingHours[i]['condition'] = weatherData['hourly'][i * 3]['weather'][0]['id'];
         upcomingHours[i]['icon'] = weather.getWeatherIcon(upcomingHours[i]['condition']);
@@ -113,7 +125,7 @@ class _LocationScreenState extends State<LocationScreen> {
               onBottom(
                 AnimatedWave(
                   height: 180,
-                  speed: 1.0,
+                  speed: 1.0, // TODO: sync up wave speed with current wind speed
                 )
               ),
               onBottom(
@@ -194,10 +206,10 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   // FORECASE DATA HERE
-                  FadeIn(
-                    delay: 3.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 50.0),
+                  Padding(
+                    padding: EdgeInsets.only(left: 50.0),
+                    child: FadeIn(
+                      delay: 3.0,
                       child: Column(
                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -222,22 +234,18 @@ class _LocationScreenState extends State<LocationScreen> {
                             textAlign: TextAlign.left,
                             style: kWeatherCharacteristicsTextStyle,
                           ),
-                          generateForecastWidget(),
+                          // Expanded(child: generateForecastWidget()),
                         ],
                       ),
                     ),
                   ),
-                  // FadeIn(
-                  //   delay: 3.0,
-                  //   child: Padding(
-                  //     padding: EdgeInsets.only(right: 15.0, bottom: 15.0),
-                  //     child: Text(
-                  //       '$weatherMessage in $city',
-                  //       textAlign: TextAlign.right,
-                  //       style: kMessageTextStyle,
-                  //     ),
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: FadeIn(
+                      delay: 3.5,
+                      child: generateForecastWidget(),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -254,5 +262,3 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       );
 }
-
-

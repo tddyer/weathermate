@@ -19,6 +19,7 @@ dependencies:
   supercharged: ^1.10.0
   geocoder: ^0.2.1
   basic_utils: ^1.2.0
+  time_formatter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
