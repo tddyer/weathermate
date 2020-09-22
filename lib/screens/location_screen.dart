@@ -184,62 +184,27 @@ class _LocationScreenState extends State<LocationScreen> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.0),
-                    child: Row(
-                      children: <Widget>[
-                        FadeIn(
-                          delay: 1.0, 
-                          child: Text(
-                            '$temp°',
-                            style: kTempTextStyle,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FadeIn(
+                        delay: 1.0, 
+                        child: Text(
+                          '$temp°',
+                          style: kTempTextStyle,
                         ),
-                        FadeIn(
-                          delay: 2.0,
-                          child: Text(
-                            weatherIcon,
-                            style: kConditionTextStyle,
-                          ),
+                      ),
+                      FadeIn(
+                        delay: 2.0,
+                        child: Text(
+                          weatherIcon,
+                          style: kConditionTextStyle,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  // FORECASE DATA HERE
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 50.0),
-                  //   child: FadeIn(
-                  //     delay: 3.0,
-                  //     child: Column(
-                  //       // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-                  //       children: [
-                  //         Text(
-                  //           'Feels like: $feelsLike°',
-                  //           textAlign: TextAlign.left,
-                  //           style: kWeatherCharacteristicsTextStyle,
-                  //         ),
-                  //         Text(
-                  //           'Humidity: $humidity%',
-                  //           textAlign: TextAlign.left,
-                  //           style: kWeatherCharacteristicsTextStyle,
-                  //         ),
-                  //         Text(
-                  //           'Wind: $windSpeed mph',
-                  //           textAlign: TextAlign.left,
-                  //           style: kWeatherCharacteristicsTextStyle,
-                  //         ),
-                  //         Text(
-                  //           'UV Index: $uvi',
-                  //           textAlign: TextAlign.left,
-                  //           style: kWeatherCharacteristicsTextStyle,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
+                    padding: EdgeInsets.only(top: 0.0, bottom: 10.0),
                     child: FadeIn(
                       delay: 3.0,
                       child: Row(
