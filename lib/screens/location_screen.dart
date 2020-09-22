@@ -146,7 +146,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Column( // main weather content section
                 children: [
                   Padding( // top navigation buttons
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -206,35 +206,80 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   // FORECASE DATA HERE
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 50.0),
+                  //   child: FadeIn(
+                  //     delay: 3.0,
+                  //     child: Column(
+                  //       // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //       children: [
+                  //         Text(
+                  //           'Feels like: $feelsLike°',
+                  //           textAlign: TextAlign.left,
+                  //           style: kWeatherCharacteristicsTextStyle,
+                  //         ),
+                  //         Text(
+                  //           'Humidity: $humidity%',
+                  //           textAlign: TextAlign.left,
+                  //           style: kWeatherCharacteristicsTextStyle,
+                  //         ),
+                  //         Text(
+                  //           'Wind: $windSpeed mph',
+                  //           textAlign: TextAlign.left,
+                  //           style: kWeatherCharacteristicsTextStyle,
+                  //         ),
+                  //         Text(
+                  //           'UV Index: $uvi',
+                  //           textAlign: TextAlign.left,
+                  //           style: kWeatherCharacteristicsTextStyle,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Padding(
-                    padding: EdgeInsets.only(left: 50.0),
+                    padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                     child: FadeIn(
                       delay: 3.0,
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Feels like: $feelsLike°',
-                            textAlign: TextAlign.left,
-                            style: kWeatherCharacteristicsTextStyle,
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Feels like: $feelsLike°',
+                                textAlign: TextAlign.left,
+                                style: kWeatherCharacteristicsTextStyle,
+                              ),
+                              Text(
+                                'Humidity: $humidity%',
+                                textAlign: TextAlign.left,
+                                style: kWeatherCharacteristicsTextStyle,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Humidity: $humidity%',
-                            textAlign: TextAlign.left,
-                            style: kWeatherCharacteristicsTextStyle,
+                          SizedBox(
+                            width: 25.0,
                           ),
-                          Text(
-                            'Wind: $windSpeed mph',
-                            textAlign: TextAlign.left,
-                            style: kWeatherCharacteristicsTextStyle,
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Wind: $windSpeed mph',
+                                textAlign: TextAlign.left,
+                                style: kWeatherCharacteristicsTextStyle,
+                              ),
+                              Text(
+                                'UV Index: $uvi',
+                                textAlign: TextAlign.left,
+                                style: kWeatherCharacteristicsTextStyle,
+                              ),
+                            ],
                           ),
-                          Text(
-                            'UVI: $uvi',
-                            textAlign: TextAlign.left,
-                            style: kWeatherCharacteristicsTextStyle,
-                          ),
-                          // Expanded(child: generateForecastWidget()),
                         ],
                       ),
                     ),
