@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/utilities/constants.dart';
@@ -25,6 +27,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   WeatherModel weather = WeatherModel();
 
+  List<Map> upcomingHours = [{}, {}, {}, {}]; // contains 4 entries for hourly forecast data (3, 6, 9, 12 hours in future)
   int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherMessage;
   String weatherIcon;
@@ -38,9 +41,31 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUI(widget.locationWeather);
   }
 
+  // TODO: add times to forecast cards
+  Widget generateForecastWidget() {
+    List<Column> forecastCards = [];
+    for (int i = 0; i < upcomingHours.length; i++) {
+      forecastCards.add(Column(
+        children: [
+          Text(
+            "${upcomingHours[i]['icon']}",
+            style: kForecastConditionTextStyle,
+          ),
+          Text(
+            "${upcomingHours[i]['temp']}",
+            textAlign: TextAlign.left,
+            style: kForecastTextStyle,
+          ),
+        ],
+      ));
+    }
+    return Row(children: forecastCards);
+  }
+
   // taps into the retrieved weather data to access desired weather characteristics
   void updateUI(dynamic weatherData) {
-    print(weatherData);
+    // for (int i = 0; i < 48; i++)
+    //   print(weatherData['hourly'][i]['temp']);
     // add feels_like, wind_speed, humidity, uvi -> all in current
     setState(() {
       if (weatherData == null) { // TODO: make this better by adding popup error message instead
@@ -51,6 +76,13 @@ class _LocationScreenState extends State<LocationScreen> {
         return;
       }
       city = weatherData['cityName'];
+
+      for (int i = 0; i < 4; i++) {
+        //print(weatherData['hourly'][i]['temp']);
+        upcomingHours[i]['temp'] = weatherData['hourly'][i * 3]['temp'].toInt();
+        upcomingHours[i]['condition'] = weatherData['hourly'][i * 3]['weather'][0]['id'];
+        upcomingHours[i]['icon'] = weather.getWeatherIcon(upcomingHours[i]['condition']);
+      }
 
       temp = weatherData['current']['temp'].toInt();
       humidity = weatherData['current']['humidity'].toInt();
@@ -190,6 +222,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             textAlign: TextAlign.left,
                             style: kWeatherCharacteristicsTextStyle,
                           ),
+                          generateForecastWidget(),
                         ],
                       ),
                     ),

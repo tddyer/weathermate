@@ -16,6 +16,11 @@ const kWeatherCharacteristicsTextStyle = TextStyle(
   fontSize: 20.0,
 );
 
+const kForecastTextStyle = TextStyle(
+  fontFamily: 'Spartan MB',
+  fontSize: 10.0,
+);
+
 const kButtonTextStyle = TextStyle(
   fontSize: 30.0,
   fontFamily: 'Spartan MB',
@@ -23,6 +28,10 @@ const kButtonTextStyle = TextStyle(
 
 const kConditionTextStyle = TextStyle(
   fontSize: 100.0,
+);
+
+const kForecastConditionTextStyle = TextStyle(
+  fontSize: 30.0,
 );
 
 const kTextFieldInputDecoration =  InputDecoration(
