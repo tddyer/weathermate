@@ -1,14 +1,14 @@
 import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
 import 'package:weathermate/utilities/constants.dart';
+import 'package:weathermate/widgets/side_drawer.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/widgets/fade_in.dart';
+
 import 'package:flutter/material.dart';
 import 'city_screen.dart';
 import 'dart:math';
 
-
-// TODO: add forecast data
 
 class LocationScreen extends StatefulWidget {
 
@@ -79,6 +79,7 @@ class _LocationScreenState extends State<LocationScreen> {
       }
       city = weatherData['cityName'];
 
+      // TODO: Check if there's an easier way to convert timestamps
       for (int i = 0; i < 4; i++) {
         upcomingHours[i]['time'] = weatherData['hourly'][i * 3]['dt'];
         upcomingHours[i]['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * upcomingHours[i]['time']); // converting timestamp -> DateTime
@@ -87,6 +88,8 @@ class _LocationScreenState extends State<LocationScreen> {
           upcomingHours[i]['time'] = (int.parse(upcomingHours[i]['time']) % 12).toString() + " PM";
         } else if (int.parse(upcomingHours[i]['time']) == 12) {
           upcomingHours[i]['time'] = "${upcomingHours[i]['time']} PM";
+        } else if (int.parse(upcomingHours[i]['time']) == 0) {
+          upcomingHours[i]['time'] = "12 AM";
         } else {
           upcomingHours[i]['time'] = "${upcomingHours[i]['time']} AM";
         }
@@ -112,9 +115,15 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
+      extendBodyBehindAppBar: true,
+      drawer: SideDrawer(),
       body: Container(
-        constraints: BoxConstraints.expand(),
-        child: SafeArea(
+        //constraints: BoxConstraints.expand(),
+        //child: SafeArea(
           child: Stack(
             children: <Widget>[ 
               // START ANIMATED BACKGROUND
@@ -145,45 +154,50 @@ class _LocationScreenState extends State<LocationScreen> {
               // END ANIMATED BACKGROUND
               Column( // main weather content section
                 children: [
-                  Padding( // top navigation buttons
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        // TODO: move these buttons to a side menu that includes settings
-                        FlatButton(
-                          onPressed: () async {
-                            var weatherData = await weather.getLocationWeather();
+                  // TODO: implement pull down for refresh location
+                  // Padding( // top navigation buttons
+                  //   padding: const EdgeInsets.only(top: 20.0),
+                    
+                  //   // child: Row(
+                  //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   //   children: <Widget>[
+                  //       // FlatButton(
+                  //       //   onPressed: () async {
+                  //       //     var weatherData = await weather.getLocationWeather();
+                  //       //     updateUI(weatherData);
+                  //       //   },
+                  //       //   child: Icon(
+                  //       //     Icons.near_me,
+                  //       //     size: 50.0,
+                  //       //   ),
+                  //       // ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: FlatButton(
+                        padding: EdgeInsets.only(top: 30.0),
+                        onPressed: () async {
+                          var inputCity = await Navigator.push( // returns Future output from CityScreen (when Navigator.pop is called)
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return CityScreen();
+                              },
+                            ),
+                          );
+                          if (inputCity != null) {
+                            var weatherData = await weather.getCityWeather(inputCity);
                             updateUI(weatherData);
-                          },
-                          child: Icon(
-                            Icons.near_me,
-                            size: 50.0,
-                          ),
+                          }
+                        },
+                        child: Icon(
+                          Icons.location_on,
+                          size: 40.0,
                         ),
-                        FlatButton(
-                          onPressed: () async {
-                            var inputCity = await Navigator.push( // returns Future output from CityScreen (when Navigator.pop is called)
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return CityScreen();
-                                },
-                              ),
-                            );
-                            if (inputCity != null) {
-                              var weatherData = await weather.getCityWeather(inputCity);
-                              updateUI(weatherData);
-                            }
-                          },
-                          child: Icon(
-                            Icons.location_city,
-                            size: 50.0,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                      // ],
+                    // ),
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -261,7 +275,7 @@ class _LocationScreenState extends State<LocationScreen> {
             ],
           ),
         ),
-      ),
+      // ),
     );
   }
 

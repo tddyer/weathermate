@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weathermate/utilities/constants.dart';
 
-// TODO: UPDATE THIS UI
+// TODO: Move this to popup on main page
 
 class CityScreen extends StatefulWidget {
   @override
