@@ -23,7 +23,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   WeatherModel weather = WeatherModel();
 
-  List<Map> upcomingHours = [{}, {}, {}, {}]; // contains 4 entries for hourly forecast data (3, 6, 9, 12 hours in future)
+  List<Map> upcomingHours = []; // contains hourly forecast data for next 24 hours
   int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherMessage;
   String weatherIcon;
@@ -63,9 +63,12 @@ class _LocationScreenState extends State<LocationScreen> {
       forecastCards.add(SizedBox(width: 15.0));
     }
 
-    return Row(
-      children: forecastCards,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: forecastCards,
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
     );
   }
 
@@ -82,23 +85,25 @@ class _LocationScreenState extends State<LocationScreen> {
       city = weatherData['cityName'];
 
       // TODO: Check if there's an easier way to convert timestamps
-      for (int i = 0; i < 4; i++) {
-        upcomingHours[i]['time'] = weatherData['hourly'][i * 3]['dt'];
-        upcomingHours[i]['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * upcomingHours[i]['time']); // converting timestamp -> DateTime
-        upcomingHours[i]['time'] = '${upcomingHours[i]['time'].hour}';
-        if (int.parse(upcomingHours[i]['time']) > 12) {
-          upcomingHours[i]['time'] = (int.parse(upcomingHours[i]['time']) % 12).toString() + " PM";
-        } else if (int.parse(upcomingHours[i]['time']) == 12) {
-          upcomingHours[i]['time'] = "${upcomingHours[i]['time']} PM";
-        } else if (int.parse(upcomingHours[i]['time']) == 0) {
-          upcomingHours[i]['time'] = "12 AM";
+      for (int i = 0; i < 24; i++) {
+        Map hourly = {};
+        hourly['time'] = weatherData['hourly'][i]['dt'];
+        hourly['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * hourly['time']); // converting timestamp -> DateTime
+        hourly['time'] = '${hourly['time'].hour}';
+        if (int.parse(hourly['time']) > 12) {
+          hourly['time'] = (int.parse(hourly['time']) % 12).toString() + " PM";
+        } else if (int.parse(hourly['time']) == 12) {
+          hourly['time'] = "${hourly['time']} PM";
+        } else if (int.parse(hourly['time']) == 0) {
+          hourly['time'] = "12 AM";
         } else {
-          upcomingHours[i]['time'] = "${upcomingHours[i]['time']} AM";
+          hourly['time'] = "${hourly['time']} AM";
         }
         
-        upcomingHours[i]['temp'] = weatherData['hourly'][i * 3]['temp'].toInt();
-        upcomingHours[i]['condition'] = weatherData['hourly'][i * 3]['weather'][0]['id'];
-        upcomingHours[i]['icon'] = weather.getWeatherIcon(upcomingHours[i]['condition']);
+        hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
+        hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
+        hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
+        upcomingHours.add(hourly);
       }
 
       temp = weatherData['current']['temp'].toInt();
@@ -202,8 +207,9 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                   ),
+                  // TODO: add date here
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 25.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -225,7 +231,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
-                    padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                    padding: EdgeInsets.only(top: 50.0, bottom: 10.0),
                     child: FadeIn(
                       delay: 3.0,
                       child: Row(
@@ -271,7 +277,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0),
                     child: FadeIn(
                       delay: 3.5,
                       child: generateForecastWidget(),
