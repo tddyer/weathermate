@@ -1,12 +1,11 @@
+import 'package:weathermate/widgets/update_location_popup.dart';
 import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
 import 'package:weathermate/utilities/constants.dart';
 import 'package:weathermate/widgets/side_drawer.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/widgets/fade_in.dart';
-
 import 'package:flutter/material.dart';
-import 'city_screen.dart';
 import 'dart:math';
 
 
@@ -37,6 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
     // retrieve weather data upon creation of screen
     updateUI(widget.locationWeather);
   }
+
 
   Widget generateForecastWidget() {
     List<Widget> forecastCards = [];
@@ -118,6 +118,22 @@ class _LocationScreenState extends State<LocationScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        actions: [
+          FlatButton( // Update location button
+            onPressed: () async {
+              var inputCity = await updateLocationPopup(context);
+              if (inputCity != null) {
+                print(inputCity);
+                var weatherData = await weather.getCityWeather(inputCity);
+                updateUI(weatherData);
+              }
+            },
+            child: Icon(
+              Icons.location_on,
+              size: 30.0,
+            ),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       drawer: SideDrawer(),
@@ -171,51 +187,30 @@ class _LocationScreenState extends State<LocationScreen> {
                   //       //     size: 50.0,
                   //       //   ),
                   //       // ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: FlatButton(
-                        padding: EdgeInsets.only(top: 30.0),
-                        onPressed: () async {
-                          var inputCity = await Navigator.push( // returns Future output from CityScreen (when Navigator.pop is called)
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CityScreen();
-                              },
-                            ),
-                          );
-                          if (inputCity != null) {
-                            var weatherData = await weather.getCityWeather(inputCity);
-                            updateUI(weatherData);
-                          }
-                        },
-                        child: Icon(
-                          Icons.location_on,
-                          size: 40.0,
-                        ),
-                      ),
-                    ),
                       // ],
                     // ),
                   // ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FadeIn(
-                        delay: 1.0, 
-                        child: Text(
-                          '$temp°',
-                          style: kTempTextStyle,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 75.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FadeIn(
+                          delay: 1.0, 
+                          child: Text(
+                            '$temp°',
+                            style: kTempTextStyle,
+                          ),
                         ),
-                      ),
-                      FadeIn(
-                        delay: 2.0,
-                        child: Text(
-                          weatherIcon,
-                          style: kConditionTextStyle,
+                        FadeIn(
+                          delay: 2.0,
+                          child: Text(
+                            weatherIcon,
+                            style: kConditionTextStyle,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
                     padding: EdgeInsets.only(top: 0.0, bottom: 10.0),
