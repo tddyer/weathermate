@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 const kTempTextStyle = TextStyle(
-  fontFamily: 'Spartan MB',
+  fontFamily: 'Montserrat',
   fontSize: 100.0,
 );
 
-const kMessageTextStyle = TextStyle(
-  fontFamily: 'Spartan MB',
-  fontSize: 60.0,
+const kCityTitleTextStyle = TextStyle(
+  fontSize: 30,
+  fontFamily: 'Montserrat',
 );
 
 const kWeatherCharacteristicsTextStyle = TextStyle(
-  fontFamily: 'Spartan MB',
-  fontSize: 20.0,
+  fontFamily: 'Montserrat',
+  fontSize: 18.0,
 );
 
 const kButtonTextStyle = TextStyle(
   fontSize: 30.0,
-  fontFamily: 'Spartan MB',
+  fontFamily: 'Montserrat',
 );
 
 const kConditionTextStyle = TextStyle(
@@ -25,7 +25,12 @@ const kConditionTextStyle = TextStyle(
 );
 
 const kForecastTextStyle = TextStyle(
-  fontFamily: 'Spartan MB',
+  // fontFamily: 'Spartan MB',
+  fontSize: 20.0,
+);
+
+const kForecastTimeTextStyle = TextStyle(
+  fontFamily: 'Montserrat',
   fontSize: 20.0,
 );
 

@@ -38,3 +38,6 @@ flutter:
     fonts:
     - asset: fonts/SpartanMB-Black.otf
       weight: 900
+  - family: Montserrat
+    fonts:
+    - asset: fonts/Montserrat-Regular.ttf

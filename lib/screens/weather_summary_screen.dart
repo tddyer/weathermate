@@ -45,12 +45,14 @@ class _LocationScreenState extends State<LocationScreen> {
         children: [
           Text(
             "${upcomingHours[i]['time']}",
-            style: kForecastTextStyle,
+            style: kForecastTimeTextStyle,
           ),
+          SizedBox(height: 10.0),
           Text(
             "${upcomingHours[i]['icon']}",
             style: kForecastConditionTextStyle,
           ),
+          SizedBox(height: 10.0),
           Text(
             "${upcomingHours[i]['temp']}°",
             textAlign: TextAlign.left,
@@ -191,7 +193,17 @@ class _LocationScreenState extends State<LocationScreen> {
                     // ),
                   // ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 75.0),
+                    padding: EdgeInsets.only(top: 100.0),
+                    child: FadeIn(
+                      delay: 1.0, 
+                      child: Text(
+                        '$city',
+                        style: kCityTitleTextStyle,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -213,7 +225,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
-                    padding: EdgeInsets.only(top: 0.0, bottom: 10.0),
+                    padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                     child: FadeIn(
                       delay: 3.0,
                       child: Row(
