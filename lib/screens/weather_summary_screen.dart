@@ -23,11 +23,14 @@ class _LocationScreenState extends State<LocationScreen> {
 
   WeatherModel weather = WeatherModel();
 
-  List<Map> upcomingHours = []; // contains hourly forecast data for next 24 hours
+  Widget forecast;
+
+  List<Map> upcomingHours; // contains hourly forecast data for next 24 hours
   int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherMessage;
   String weatherIcon;
   String city;
+  String date;
 
   @override
   void initState() {
@@ -82,22 +85,30 @@ class _LocationScreenState extends State<LocationScreen> {
         city = '';
         return;
       }
+      
       city = weatherData['cityName'];
+
+      // emptying any old forecast data before repopulating
+      upcomingHours = [];
 
       // TODO: Check if there's an easier way to convert timestamps
       for (int i = 0; i < 24; i++) {
         Map hourly = {};
         hourly['time'] = weatherData['hourly'][i]['dt'];
         hourly['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * hourly['time']); // converting timestamp -> DateTime
-        hourly['time'] = '${hourly['time'].hour}';
-        if (int.parse(hourly['time']) > 12) {
-          hourly['time'] = (int.parse(hourly['time']) % 12).toString() + " PM";
-        } else if (int.parse(hourly['time']) == 12) {
-          hourly['time'] = "${hourly['time']} PM";
-        } else if (int.parse(hourly['time']) == 0) {
+
+        if (i == 0) 
+          date = "${daysOfWeek[hourly['time'].weekday]}, ${months[hourly['time'].month]} ${hourly['time'].day.toString()}";
+
+
+        if (hourly['time'].hour > 12) {
+          hourly['time'] = (hourly['time'].hour % 12).toString() + " PM";
+        } else if (hourly['time'].hour == 12) {
+          hourly['time'] = "${hourly['time'].hour} PM";
+        } else if (hourly['time'].hour == 0) {
           hourly['time'] = "12 AM";
         } else {
-          hourly['time'] = "${hourly['time']} AM";
+          hourly['time'] = "${hourly['time'].hour} AM";
         }
         
         hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
@@ -116,6 +127,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
       var condition = weatherData['current']['weather'][0]['id'];
       weatherIcon = weather.getWeatherIcon(condition);
+      forecast = generateForecastWidget();
     });
   }
 
@@ -130,7 +142,6 @@ class _LocationScreenState extends State<LocationScreen> {
             onPressed: () async {
               var inputCity = await updateLocationPopup(context);
               if (inputCity != null) {
-                print(inputCity);
                 var weatherData = await weather.getCityWeather(inputCity);
                 updateUI(weatherData);
               }
@@ -207,9 +218,19 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: FadeIn(
+                      delay: 1.0, 
+                      child: Text(
+                        '$date',
+                        style: kDateTextStyle,
+                      ),
+                    ),
+                  ),
                   // TODO: add date here
                   Padding(
-                    padding: const EdgeInsets.only(top: 25.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -280,7 +301,8 @@ class _LocationScreenState extends State<LocationScreen> {
                     padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0),
                     child: FadeIn(
                       delay: 3.5,
-                      child: generateForecastWidget(),
+                      child: forecast,
+                      // child: generateForecastWidget(),
                     ),
                   ),
                 ],
