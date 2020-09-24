@@ -44,6 +44,34 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUI(widget.locationWeather);
   }
 
+  void updateForecastData(dynamic weatherData) {
+    // TODO: Check if there's an easier way to convert timestamps
+      for (int i = 0; i < 24; i++) {
+        Map hourly = {};
+        hourly['time'] = weatherData['hourly'][i]['dt'];
+        hourly['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * hourly['time']); // converting timestamp -> DateTime
+
+        if (i == 0) 
+          date = "${daysOfWeek[hourly['time'].weekday]}, ${months[hourly['time'].month]} ${hourly['time'].day.toString()}";
+
+
+        if (hourly['time'].hour > 12) {
+          hourly['time'] = (hourly['time'].hour % 12).toString() + " PM";
+        } else if (hourly['time'].hour == 12) {
+          hourly['time'] = "${hourly['time'].hour} PM";
+        } else if (hourly['time'].hour == 0) {
+          hourly['time'] = "12 AM";
+        } else {
+          hourly['time'] = "${hourly['time'].hour} AM";
+        }
+        
+        hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
+        hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
+        hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
+        upcomingHours.add(hourly);
+      }
+  }
+
   // clears out old forecast data and creates new forecast cards, returning them in a Scroll View
   Widget generateForecastWidget() {
     List<Widget> forecastCards = [];
@@ -70,11 +98,16 @@ class _LocationScreenState extends State<LocationScreen> {
       forecastCards.add(SizedBox(width: 15.0));
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: forecastCards,
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.only(top: 40.0, left: 25.0, right: 25.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: forecastCards.length,
+          itemBuilder: (context, ind) {
+            return forecastCards[ind];
+          },
+        ),
       ),
     );
   }
@@ -95,31 +128,7 @@ class _LocationScreenState extends State<LocationScreen> {
       // emptying any old forecast data before repopulating
       upcomingHours = [];
 
-      // TODO: Check if there's an easier way to convert timestamps
-      for (int i = 0; i < 24; i++) {
-        Map hourly = {};
-        hourly['time'] = weatherData['hourly'][i]['dt'];
-        hourly['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * hourly['time']); // converting timestamp -> DateTime
-
-        if (i == 0) 
-          date = "${daysOfWeek[hourly['time'].weekday]}, ${months[hourly['time'].month]} ${hourly['time'].day.toString()}";
-
-
-        if (hourly['time'].hour > 12) {
-          hourly['time'] = (hourly['time'].hour % 12).toString() + " PM";
-        } else if (hourly['time'].hour == 12) {
-          hourly['time'] = "${hourly['time'].hour} PM";
-        } else if (hourly['time'].hour == 0) {
-          hourly['time'] = "12 AM";
-        } else {
-          hourly['time'] = "${hourly['time'].hour} AM";
-        }
-        
-        hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
-        hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
-        hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
-        upcomingHours.add(hourly);
-      }
+      updateForecastData(weatherData);
 
       temp = weatherData['current']['temp'].toInt();
       humidity = weatherData['current']['humidity'].toInt();
@@ -288,13 +297,14 @@ class _LocationScreenState extends State<LocationScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0, bottom: 20.0),
-                      child: FadeIn(
-                        delay: 3.5,
-                        child: forecast,
-                      ),
-                    ),
+                    forecast,
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0, bottom: 20.0),
+                    //   child: FadeIn(
+                    //     delay: 3.5,
+                    //     child: forecast,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
