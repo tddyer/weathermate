@@ -1,13 +1,13 @@
 import 'package:weathermate/widgets/update_location_popup.dart';
 import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:weathermate/utilities/constants.dart';
 import 'package:weathermate/widgets/side_drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:weathermate/widgets/on_bottom.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/widgets/fade_in.dart';
-
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -25,45 +25,32 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
 
   final RefreshController _refreshController = RefreshController();
-
   WeatherModel weather = WeatherModel();
 
   ListView forecastListView;
-
   List<Map> hourlyForecastData;
   int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherIcon;
   String city;
-  String date;
+  String formattedDate;
 
   @override
   void initState() {
     super.initState();
-    // retrieve weather data upon creation of screen
+    
+    // populate weather data upon creation of screen
     updateUI(widget.locationWeather);
   }
 
   void updateForecastData(dynamic weatherData) {
-    // TODO: Check if there's an easier way to convert timestamps
       for (int i = 0; i < 24; i++) {
         Map hourly = {};
-        hourly['time'] = weatherData['hourly'][i]['dt'];
-        hourly['time'] = DateTime.fromMillisecondsSinceEpoch(1000 * hourly['time']); // converting timestamp -> DateTime
+        DateTime rawDt = DateTime.fromMillisecondsSinceEpoch(1000 * weatherData['hourly'][i]['dt']);
 
-        if (i == 0) 
-          date = "${daysOfWeek[hourly['time'].weekday]}, ${months[hourly['time'].month]} ${hourly['time'].day.toString()}";
-
-
-        if (hourly['time'].hour > 12) {
-          hourly['time'] = (hourly['time'].hour % 12).toString() + " PM";
-        } else if (hourly['time'].hour == 12) {
-          hourly['time'] = "${hourly['time'].hour} PM";
-        } else if (hourly['time'].hour == 0) {
-          hourly['time'] = "12 AM";
-        } else {
-          hourly['time'] = "${hourly['time'].hour} AM";
-        }
+        if (i == 0)
+          formattedDate = DateTimeFormat.format(rawDt, format: AmericanDateFormats.dayOfWeekShortWithComma).toString();
         
+        hourly['time'] = DateTimeFormat.format(rawDt, format: 'g A').toString();
         hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
         hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
         hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
@@ -71,8 +58,8 @@ class _LocationScreenState extends State<LocationScreen> {
       }
   }
 
-  // clears out old forecast data and creates new forecast cards, returning them in a Scroll View
-  Widget generateForecastWidget() {
+  // clears out old forecast data and creates new forecast cards
+  Widget generateForecastListView() {
     List<Widget> forecastCards = [];
     for (int i = 0; i < hourlyForecastData.length; i++) {
       forecastCards.add(Column(
@@ -97,13 +84,12 @@ class _LocationScreenState extends State<LocationScreen> {
       forecastCards.add(SizedBox(width: 15.0));
     }
 
-    return  ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: forecastCards.length,
-        itemBuilder: (context, ind) {
-          return forecastCards[ind];
-        },
-      
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: forecastCards.length,
+      itemBuilder: (context, ind) {
+        return forecastCards[ind];
+      },
     );
   }
 
@@ -132,7 +118,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
       var condition = weatherData['current']['weather'][0]['id'];
       weatherIcon = weather.getWeatherIcon(condition);
-      forecastListView = generateForecastWidget();
+      forecastListView = generateForecastListView();
     });
   }
 
@@ -216,7 +202,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       child: FadeIn(
                         delay: 1.0, 
                         child: Text(
-                          '$date',
+                          '$formattedDate',
                           style: kDateTextStyle,
                         ),
                       ),
