@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weathermate/utilities/constants.dart';
 
 // TODO: add custom nav pages (refresh location, choose location, advanced weather, settings)
 
@@ -11,38 +12,40 @@ class SideDrawer extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             child: Text(
-              'Side menu',
+              'My WeatherMate',
               style: TextStyle(color: Colors.white, fontSize: 25),
             ),
             decoration: BoxDecoration(
-                color: Colors.green,
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('images/location_background.jpg'))),
+                color: accentColor,
+                // image: DecorationImage(
+                //     fit: BoxFit.fill,
+                //     image: AssetImage('images/location_background.jpg')
+              //)
+            ),
           ),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Welcome'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Profile'),
+            leading: Icon(Icons.my_location, color: accentColor,),
+            title: Text('Summary'),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: Icon(Icons.assessment, color: accentColor,),
+            title: Text('Detailed Weather'),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
+            leading: Icon(Icons.opacity, color: accentColor,),
+            title: Text('Precipitation'),
+            onTap: () => Navigator.of(context).pop(),
+          ),
+          ListTile(
+            leading: Icon(Icons.border_color, color: accentColor,),
             title: Text('Feedback'),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: Icon(Icons.settings, color: accentColor,),
+            title: Text('Settings'),
             onTap: () => Navigator.of(context).pop(),
           ),
         ],

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 // TODO: update UI
 
 Future updateLocationPopup(BuildContext context) async {
+
     String inputCity;
+
     return showDialog(
       context: context,
       builder: (context) {

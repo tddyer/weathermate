@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const accentColor =  Colors.blueGrey;
+
 const daysOfWeek = {
   1: 'Monday',
   2: 'Tuesday',

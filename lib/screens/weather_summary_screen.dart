@@ -40,12 +40,11 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    
     // retrieve weather data upon creation of screen
     updateUI(widget.locationWeather);
   }
 
-
+  // clears out old forecast data and creates new forecast cards, returning them in a Scroll View
   Widget generateForecastWidget() {
     List<Widget> forecastCards = [];
     for (int i = 0; i < upcomingHours.length; i++) {
@@ -294,7 +293,6 @@ class _LocationScreenState extends State<LocationScreen> {
                       child: FadeIn(
                         delay: 3.5,
                         child: forecast,
-                        // child: generateForecastWidget(),
                       ),
                     ),
                   ],
