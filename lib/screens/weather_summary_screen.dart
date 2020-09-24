@@ -28,11 +28,10 @@ class _LocationScreenState extends State<LocationScreen> {
 
   WeatherModel weather = WeatherModel();
 
-  Widget forecast;
+  ListView forecastListView;
 
-  List<Map> upcomingHours; // contains hourly forecast data for next 24 hours
+  List<Map> hourlyForecastData;
   int temp, humidity, feelsLike, windSpeed, uvi;
-  String weatherMessage;
   String weatherIcon;
   String city;
   String date;
@@ -68,28 +67,28 @@ class _LocationScreenState extends State<LocationScreen> {
         hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
         hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
         hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
-        upcomingHours.add(hourly);
+        hourlyForecastData.add(hourly);
       }
   }
 
   // clears out old forecast data and creates new forecast cards, returning them in a Scroll View
   Widget generateForecastWidget() {
     List<Widget> forecastCards = [];
-    for (int i = 0; i < upcomingHours.length; i++) {
+    for (int i = 0; i < hourlyForecastData.length; i++) {
       forecastCards.add(Column(
         children: [
           Text(
-            "${upcomingHours[i]['time']}",
+            "${hourlyForecastData[i]['time']}",
             style: kForecastTimeTextStyle,
           ),
           SizedBox(height: 10.0),
           Text(
-            "${upcomingHours[i]['icon']}",
+            "${hourlyForecastData[i]['icon']}",
             style: kForecastConditionTextStyle,
           ),
           SizedBox(height: 10.0),
           Text(
-            "${upcomingHours[i]['temp']}°",
+            "${hourlyForecastData[i]['temp']}°",
             textAlign: TextAlign.left,
             style: kForecastTextStyle,
           ),
@@ -98,17 +97,13 @@ class _LocationScreenState extends State<LocationScreen> {
       forecastCards.add(SizedBox(width: 15.0));
     }
 
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.only(top: 40.0, left: 25.0, right: 25.0),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: forecastCards.length,
-          itemBuilder: (context, ind) {
-            return forecastCards[ind];
-          },
-        ),
-      ),
+    return  ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: forecastCards.length,
+        itemBuilder: (context, ind) {
+          return forecastCards[ind];
+        },
+      
     );
   }
 
@@ -118,7 +113,6 @@ class _LocationScreenState extends State<LocationScreen> {
       if (weatherData == null) { // TODO: make this better by adding popup error message instead
         temp = 0;
         weatherIcon = 'Error';
-        weatherMessage = 'Unable to retrieve weather data';
         city = '';
         return;
       }
@@ -126,7 +120,7 @@ class _LocationScreenState extends State<LocationScreen> {
       city = weatherData['cityName'];
 
       // emptying any old forecast data before repopulating
-      upcomingHours = [];
+      hourlyForecastData = [];
 
       updateForecastData(weatherData);
 
@@ -136,11 +130,9 @@ class _LocationScreenState extends State<LocationScreen> {
       windSpeed = weatherData['current']['wind_speed'].toInt();
       uvi = weatherData['current']['uvi'].toInt();
 
-      weatherMessage = weather.getMessage(temp);
-
       var condition = weatherData['current']['weather'][0]['id'];
       weatherIcon = weather.getWeatherIcon(condition);
-      forecast = generateForecastWidget();
+      forecastListView = generateForecastWidget();
     });
   }
 
@@ -297,14 +289,12 @@ class _LocationScreenState extends State<LocationScreen> {
                         ),
                       ),
                     ),
-                    forecast,
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0, bottom: 20.0),
-                    //   child: FadeIn(
-                    //     delay: 3.5,
-                    //     child: forecast,
-                    //   ),
-                    // ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 40.0, left: 25.0, right: 25.0),
+                        child: forecastListView,
+                      )
+                    ),
                   ],
                 ),
               ),
