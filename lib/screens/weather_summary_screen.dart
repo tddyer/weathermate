@@ -153,6 +153,7 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
         ],
       ),
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       drawer: SideDrawer(),
       body: Container(
@@ -186,126 +187,127 @@ class _LocationScreenState extends State<LocationScreen> {
                 )
               ),
               // END ANIMATED BACKGROUND
-              Column( // main weather content section
-                children: [
-                  // TODO: implement pull down for refresh location
-                  // Padding( // top navigation buttons
-                  //   padding: const EdgeInsets.only(top: 20.0),
-                    
-                  //   // child: Row(
-                  //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   //   children: <Widget>[
-                  //       // FlatButton(
-                  //       //   onPressed: () async {
-                  //       //     var weatherData = await weather.getLocationWeather();
-                  //       //     updateUI(weatherData);
-                  //       //   },
-                  //       //   child: Icon(
-                  //       //     Icons.near_me,
-                  //       //     size: 50.0,
-                  //       //   ),
-                  //       // ),
-                      // ],
+              SafeArea (
+                child: Column( // main weather content section
+                  children: [
+                    // TODO: implement pull down for refresh location
+                    // Padding( // top navigation buttons
+                    //   padding: const EdgeInsets.only(top: 20.0),
+                      
+                    //   // child: Row(
+                    //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   //   children: <Widget>[
+                    //       // FlatButton(
+                    //       //   onPressed: () async {
+                    //       //     var weatherData = await weather.getLocationWeather();
+                    //       //     updateUI(weatherData);
+                    //       //   },
+                    //       //   child: Icon(
+                    //       //     Icons.near_me,
+                    //       //     size: 50.0,
+                    //       //   ),
+                    //       // ),
+                        // ],
+                      // ),
                     // ),
-                  // ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 100.0),
-                    child: FadeIn(
-                      delay: 1.0, 
-                      child: Text(
-                        '$city',
-                        style: kCityTitleTextStyle,
+                    Padding(
+                      padding: EdgeInsets.only(top: 40.0),
+                      child: FadeIn(
+                        delay: 1.0, 
+                        child: Text(
+                          '$city',
+                          style: kCityTitleTextStyle,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: FadeIn(
-                      delay: 1.0, 
-                      child: Text(
-                        '$date',
-                        style: kDateTextStyle,
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: FadeIn(
+                        delay: 1.0, 
+                        child: Text(
+                          '$date',
+                          style: kDateTextStyle,
+                        ),
                       ),
                     ),
-                  ),
-                  // TODO: add date here
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        FadeIn(
-                          delay: 1.0, 
-                          child: Text(
-                            '$temp°',
-                            style: kTempTextStyle,
-                          ),
-                        ),
-                        FadeIn(
-                          delay: 2.0,
-                          child: Text(
-                            weatherIcon,
-                            style: kConditionTextStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
-                    padding: EdgeInsets.only(top: 50.0, bottom: 10.0),
-                    child: FadeIn(
-                      delay: 3.0,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Feels like: $feelsLike°',
-                                textAlign: TextAlign.left,
-                                style: kWeatherCharacteristicsTextStyle,
-                              ),
-                              Text(
-                                'Humidity: $humidity%',
-                                textAlign: TextAlign.left,
-                                style: kWeatherCharacteristicsTextStyle,
-                              ),
-                            ],
+                        children: <Widget>[
+                          FadeIn(
+                            delay: 1.0, 
+                            child: Text(
+                              '$temp°',
+                              style: kTempTextStyle,
+                            ),
                           ),
-                          SizedBox(
-                            width: 25.0,
-                          ),
-                          Column(
-                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Wind: $windSpeed mph',
-                                textAlign: TextAlign.left,
-                                style: kWeatherCharacteristicsTextStyle,
-                              ),
-                              Text(
-                                'UV Index: $uvi',
-                                textAlign: TextAlign.left,
-                                style: kWeatherCharacteristicsTextStyle,
-                              ),
-                            ],
+                          FadeIn(
+                            delay: 2.0,
+                            child: Text(
+                              weatherIcon,
+                              style: kConditionTextStyle,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0),
-                    child: FadeIn(
-                      delay: 3.5,
-                      child: forecast,
-                      // child: generateForecastWidget(),
+                    Padding( // TODO: Consider adding precipitatin amounts, chances, etc (+ in forecast)
+                      padding: EdgeInsets.only(top: 50.0, bottom: 10.0),
+                      child: FadeIn(
+                        delay: 3.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Feels like: $feelsLike°',
+                                  textAlign: TextAlign.left,
+                                  style: kWeatherCharacteristicsTextStyle,
+                                ),
+                                Text(
+                                  'Humidity: $humidity%',
+                                  textAlign: TextAlign.left,
+                                  style: kWeatherCharacteristicsTextStyle,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 25.0,
+                            ),
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Wind: $windSpeed mph',
+                                  textAlign: TextAlign.left,
+                                  style: kWeatherCharacteristicsTextStyle,
+                                ),
+                                Text(
+                                  'UV Index: $uvi',
+                                  textAlign: TextAlign.left,
+                                  style: kWeatherCharacteristicsTextStyle,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0),
+                      child: FadeIn(
+                        delay: 3.5,
+                        child: forecast,
+                        // child: generateForecastWidget(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
