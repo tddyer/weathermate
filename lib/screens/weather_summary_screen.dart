@@ -3,8 +3,11 @@ import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
 import 'package:weathermate/utilities/constants.dart';
 import 'package:weathermate/widgets/side_drawer.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:weathermate/widgets/on_bottom.dart';
 import 'package:weathermate/services/weather.dart';
 import 'package:weathermate/widgets/fade_in.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -20,6 +23,8 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+
+  final RefreshController _refreshController = RefreshController();
 
   WeatherModel weather = WeatherModel();
 
@@ -156,9 +161,15 @@ class _LocationScreenState extends State<LocationScreen> {
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       drawer: SideDrawer(),
-      body: Container(
-        //constraints: BoxConstraints.expand(),
-        //child: SafeArea(
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: () async {
+          var weatherData = await weather.getLocationWeather();
+          updateUI(weatherData);
+          _refreshController.refreshCompleted();
+        },
+        child: Container(
           child: Stack(
             children: <Widget>[ 
               // START ANIMATED BACKGROUND
@@ -190,26 +201,6 @@ class _LocationScreenState extends State<LocationScreen> {
               SafeArea (
                 child: Column( // main weather content section
                   children: [
-                    // TODO: implement pull down for refresh location
-                    // Padding( // top navigation buttons
-                    //   padding: const EdgeInsets.only(top: 20.0),
-                      
-                    //   // child: Row(
-                    //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   //   children: <Widget>[
-                    //       // FlatButton(
-                    //       //   onPressed: () async {
-                    //       //     var weatherData = await weather.getLocationWeather();
-                    //       //     updateUI(weatherData);
-                    //       //   },
-                    //       //   child: Icon(
-                    //       //     Icons.near_me,
-                    //       //     size: 50.0,
-                    //       //   ),
-                    //       // ),
-                        // ],
-                      // ),
-                    // ),
                     Padding(
                       padding: EdgeInsets.only(top: 40.0),
                       child: FadeIn(
@@ -299,7 +290,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0),
+                      padding: const EdgeInsets.only(top: 50.0, left: 35.0, right: 35.0, bottom: 20.0),
                       child: FadeIn(
                         delay: 3.5,
                         child: forecast,
@@ -312,14 +303,7 @@ class _LocationScreenState extends State<LocationScreen> {
             ],
           ),
         ),
-      // ),
+      ),
     );
   }
-
-  Widget onBottom(Widget child) => Positioned.fill(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: child,
-        ),
-      );
 }
