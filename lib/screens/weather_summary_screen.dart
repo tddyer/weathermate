@@ -37,7 +37,7 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // populate weather data upon creation of screen
     updateUI(widget.locationWeather);
   }
@@ -102,22 +102,20 @@ class _LocationScreenState extends State<LocationScreen> {
         city = '';
         return;
       }
-      
+         
+      // refreshing weather local variabless
       city = weatherData['cityName'];
-
-      // emptying any old forecast data before repopulating
-      hourlyForecastData = [];
-
-      updateForecastData(weatherData);
-
       temp = weatherData['current']['temp'].toInt();
       humidity = weatherData['current']['humidity'].toInt();
       feelsLike = weatherData['current']['feels_like'].toInt();
       windSpeed = weatherData['current']['wind_speed'].toInt();
       uvi = weatherData['current']['uvi'].toInt();
+      weatherIcon = weather.getWeatherIcon(weatherData['current']['weather'][0]['id']);
 
-      var condition = weatherData['current']['weather'][0]['id'];
-      weatherIcon = weather.getWeatherIcon(condition);
+      // emptying any old forecast data before repopulating to avoid newly fetched
+      // forecast data getting appended to the old forecast data
+      hourlyForecastData = [];
+      updateForecastData(weatherData);   
       forecastListView = generateForecastListView();
     });
   }
