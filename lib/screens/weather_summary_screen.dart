@@ -63,6 +63,7 @@ class _LocationScreenState extends State<LocationScreen> {
     List<Widget> forecastCards = [];
     for (int i = 0; i < hourlyForecastData.length; i++) {
       forecastCards.add(Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "${hourlyForecastData[i]['time']}",
@@ -190,101 +191,119 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Column( // main weather content section
                   children: [
                     Expanded( // section 1: city + date
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          children: [
-                            FadeIn(
-                              delay: 1.0, 
-                              child: Text(
-                                '$city',
-                                style: kCityTitleTextStyle,
-                              ),
-                            ),
-                            FadeIn(
-                              delay: 1.0, 
-                              child: Text(
-                                '$formattedDate',
-                                style: kDateTextStyle,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded( // section 2: temperature + weather characterstics
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
+                      flex: 1,
+                      child: Container(
+                        // color: Colors.red,
+                        height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                               FadeIn(
                                 delay: 1.0, 
                                 child: Text(
-                                  '$temp°',
-                                  style: kTempTextStyle,
+                                  '$city',
+                                  style: kCityTitleTextStyle,
                                 ),
                               ),
                               FadeIn(
-                                delay: 2.0,
+                                delay: 1.0, 
                                 child: Text(
-                                  weatherIcon,
-                                  style: kConditionTextStyle,
+                                  '$formattedDate',
+                                  style: kDateTextStyle,
                                 ),
                               ),
                             ],
                           ),
-                          FadeIn(
-                            delay: 3.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Feels like: $feelsLike°',
-                                      textAlign: TextAlign.left,
-                                      style: kWeatherCharacteristicsTextStyle,
+                        ),
+                      ),
+                    ),
+                    Expanded( // section 2: temperature + weather characterstics
+                      flex: 3,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        // color: Colors.blue,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  FadeIn(
+                                    delay: 1.0, 
+                                    child: Text(
+                                      '$temp°',
+                                      style: kTempTextStyle,
                                     ),
-                                    Text(
-                                      'Humidity: $humidity%',
-                                      textAlign: TextAlign.left,
-                                      style: kWeatherCharacteristicsTextStyle,
+                                  ),
+                                  FadeIn(
+                                    delay: 2.0,
+                                    child: Text(
+                                      weatherIcon,
+                                      style: kConditionTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              FadeIn(
+                                delay: 3.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Feels like: $feelsLike°',
+                                          textAlign: TextAlign.left,
+                                          style: kWeatherCharacteristicsTextStyle,
+                                        ),
+                                        Text(
+                                          'Humidity: $humidity%',
+                                          textAlign: TextAlign.left,
+                                          style: kWeatherCharacteristicsTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 25.0,
+                                    ),
+                                    Column(
+                                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Wind: $windSpeed mph',
+                                          textAlign: TextAlign.left,
+                                          style: kWeatherCharacteristicsTextStyle,
+                                        ),
+                                        Text(
+                                          'UV Index: $uvi',
+                                          textAlign: TextAlign.left,
+                                          style: kWeatherCharacteristicsTextStyle,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  width: 25.0,
-                                ),
-                                Column(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Wind: $windSpeed mph',
-                                      textAlign: TextAlign.left,
-                                      style: kWeatherCharacteristicsTextStyle,
-                                    ),
-                                    Text(
-                                      'UV Index: $uvi',
-                                      textAlign: TextAlign.left,
-                                      style: kWeatherCharacteristicsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     Expanded( // section 3: forecast
-                      flex: 3,
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-                        child: forecastListView,
+                      flex: 4,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          height: 175, 
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 25.0),
+                          child: forecastListView
+                        ),
                       )
                     ),
                   ],
