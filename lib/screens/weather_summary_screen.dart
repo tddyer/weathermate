@@ -52,6 +52,11 @@ class _LocationScreenState extends State<LocationScreen> {
         
         hourly['time'] = DateTimeFormat.format(rawDt, format: 'g A').toString();
         hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
+        hourly['humidity'] = weatherData['hourly'][i]['humidity'];
+        hourly['pop'] = (weatherData['hourly'][i]['pop'] * 100).round();
+        hourly['feels_like'] = weatherData['hourly'][i]['feels_like'];
+        hourly['wind_speed'] = weatherData['hourly'][i]['wind_speed'];
+        hourly['cloud_coverage'] = weatherData['hourly'][i]['clouds'];
         hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
         hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
         hourlyForecastData.add(hourly);
@@ -63,30 +68,77 @@ class _LocationScreenState extends State<LocationScreen> {
     List<Widget> forecastCards = [];
     for (int i = 0; i < hourlyForecastData.length; i++) {
       forecastCards.add(Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "${hourlyForecastData[i]['time']}",
-            style: kForecastTimeTextStyle,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Text(
+                      "${hourlyForecastData[i]['time']}",
+                      style: kForecastTimeTextStyle,
+                    ),
+                    // Text(
+                    //   "${hourlyForecastData[i]['icon']}",
+                    //   style: kForecastConditionTextStyle,
+                    // ),
+                    Text(
+                      "${hourlyForecastData[i]['temp']}°",
+                      textAlign: TextAlign.left,
+                      style: kForecastTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Feels like: ${hourlyForecastData[i]['feels_like']}°",
+                      style: kWeatherCharacteristicsTextStyle,
+                    ),
+                    Text(
+                      "Humidity: ${hourlyForecastData[i]['humidity']}%",
+                      style: kWeatherCharacteristicsTextStyle,
+                    ),
+                    Text(
+                      "Wind speed: ${hourlyForecastData[i]['wind_speed']} mph",
+                      style: kWeatherCharacteristicsTextStyle,
+                    ),
+                    Text(
+                      "Cloud coverage: ${hourlyForecastData[i]['cloud_coverage']}%",
+                      textAlign: TextAlign.left,
+                      style: kWeatherCharacteristicsTextStyle,
+                    ),
+                    Text(
+                      "Precipitation chance: ${hourlyForecastData[i]['pop']}%",
+                      style: kWeatherCharacteristicsTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10.0),
-          Text(
-            "${hourlyForecastData[i]['icon']}",
-            style: kForecastConditionTextStyle,
-          ),
-          SizedBox(height: 10.0),
-          Text(
-            "${hourlyForecastData[i]['temp']}°",
-            textAlign: TextAlign.left,
-            style: kForecastTextStyle,
-          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Divider(
+              color: Colors.grey[500],
+              height: 5,
+              thickness: 1,
+            ),
+          )
         ],
       ));
-      forecastCards.add(SizedBox(width: 15.0));
+      // forecastCards.add(SizedBox(width: 15.0));
     }
 
     return ListView.builder(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       itemCount: forecastCards.length,
       itemBuilder: (context, ind) {
         return forecastCards[ind];
@@ -149,7 +201,6 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      drawer: SideDrawer(),
       body: SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
@@ -297,13 +348,9 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                     Expanded( // section 3: forecast
                       flex: 4,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          height: 175, 
-                          padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 25.0),
-                          child: forecastListView
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: forecastListView,
                       )
                     ),
                   ],
