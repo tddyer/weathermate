@@ -1,3 +1,4 @@
+import 'package:weathermate/widgets/animated_background.dart';
 import 'package:weathermate/widgets/update_location_popup.dart';
 import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
@@ -27,6 +28,7 @@ class _LocationScreenState extends State<LocationScreen> {
   WeatherModel weather = WeatherModel();
 
   ListView forecastListView;
+  AnimatedBackground background;
   List<Map> hourlyForecastData;
   int temp, humidity, feelsLike, windSpeed, uvi;
   String weatherIcon;
@@ -53,8 +55,8 @@ class _LocationScreenState extends State<LocationScreen> {
         hourly['temp'] = weatherData['hourly'][i]['temp'].toInt();
         hourly['humidity'] = weatherData['hourly'][i]['humidity'];
         hourly['pop'] = (weatherData['hourly'][i]['pop'] * 100).round();
-        hourly['feels_like'] = weatherData['hourly'][i]['feels_like'];
-        hourly['wind_speed'] = weatherData['hourly'][i]['wind_speed'];
+        hourly['feels_like'] = weatherData['hourly'][i]['feels_like'].round();
+        hourly['wind_speed'] = weatherData['hourly'][i]['wind_speed'].round();
         hourly['cloud_coverage'] = weatherData['hourly'][i]['clouds'];
         hourly['condition'] = weatherData['hourly'][i]['weather'][0]['id'];
         hourly['icon'] = weather.getWeatherIcon(hourly['condition']);
@@ -164,6 +166,13 @@ class _LocationScreenState extends State<LocationScreen> {
       uvi = weatherData['current']['uvi'].toInt();
       weatherIcon = weather.getWeatherIcon(weatherData['current']['weather'][0]['id']);
 
+      // updating background based on temp
+      if (temp < 32) {
+        background = snowBackground;
+      } else {
+        background = rainBackground;
+      }
+
       // emptying any old forecast data before repopulating to avoid newly fetched
       // forecast data getting appended to the old forecast data
       hourlyForecastData = [];
@@ -174,10 +183,6 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

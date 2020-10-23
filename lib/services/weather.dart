@@ -18,6 +18,7 @@ class WeatherModel {
       '&appid=$apiKey&units=imperial');
     var weatherData = await network.getData();
     weatherData['cityName'] = StringUtils.capitalize(city);
+    print(weatherData['cityName']);
     return weatherData;
   }
 
