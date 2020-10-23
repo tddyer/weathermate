@@ -3,7 +3,6 @@ import 'package:weathermate/utilities/backgrounds.dart';
 import 'package:weathermate/widgets/animated_wave.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:weathermate/utilities/constants.dart';
-import 'package:weathermate/widgets/side_drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:weathermate/widgets/on_bottom.dart';
 import 'package:weathermate/services/weather.dart';
